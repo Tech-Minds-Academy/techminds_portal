@@ -1,0 +1,140 @@
+<%- include('../../partials/navbar') %>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Minds — Forgot Password</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; }
+    .brand-gradient { background: linear-gradient(90deg, #1e3a8a, #2563eb, #1e3a8a); }
+    .card { background: rgba(255,255,255,.96); backdrop-filter: saturate(160%) blur(6px); }
+    .ring-error { box-shadow: 0 0 0 2px rgba(239, 68, 68, .35); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Hero -->
+  <section class="brand-gradient text-white px-6 py-14 sm:py-20">
+    <div class="mx-auto max-w-md text-center">
+      <h1 class="text-3xl sm:text-4xl font-extrabold">Forgot password</h1>
+      <p class="mt-3 text-blue-50/90">Enter your email or username to receive a reset link.</p>
+    </div>
+  </section>
+
+  <!-- Card -->
+  <main class="px-6 -mt-10 pb-20">
+    <div class="mx-auto max-w-md">
+      <div class="card rounded-2xl shadow-xl border border-blue-100 p-6">
+        <form id="forgotForm" class="grid grid-cols-1 gap-5" novalidate>
+          <!-- Identity -->
+          <div class="flex flex-col">
+            <label for="identity" class="mb-1.5 text-sm font-medium text-slate-700">Email or Username <span class="text-blue-700">*</span></label>
+            <input id="identity" name="identity" type="text" placeholder="you@example.com or ada.okoye" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
+            <p data-err="identity" class="mt-1 hidden text-xs text-red-600">Please enter a valid email or a username (min 3 characters).</p>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="submitBtn" class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/50">Send reset link</button>
+        </form>
+
+        <!-- Links -->
+        <div class="mt-4 flex items-center justify-between text-sm">
+          <a href="/student/login" class="text-blue-700 hover:text-blue-800" >Back to login</a>
+          <a href="/student/register" class="text-blue-700 hover:text-blue-800" >Create account</a>
+        </div>
+      </div>
+
+      <!-- Result / Demo output -->
+      <div id="result" class="hidden mt-6 card rounded-2xl shadow-xl border border-blue-100 p-6">
+        <h3 class="text-lg font-semibold">Check your inbox</h3>
+        <p class="text-sm text-slate-600">If an account exists, a password reset link has been sent. (Demo only — nothing was actually sent.)</p>
+        <pre id="resultJson" class="mt-3 max-h-60 overflow-auto rounded-xl bg-slate-900 p-4 text-xs leading-relaxed text-blue-100"></pre>
+        <div class="mt-3 flex gap-3">
+          <button id="resendBtn" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">Resend (<span id="countdown">30</span>s)</button>
+          <button id="newRequestBtn" class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">New request</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('forgotForm');
+    const resendBtn = document.getElementById('resendBtn');
+    const countdownEl = document.getElementById('countdown');
+
+    function qs(sel, el=document){ return el.querySelector(sel); }
+    function isEmail(v){ return /\S+@\S+\.\S+/.test(v); }
+
+    function setError(name, show){
+      const input = qs('[name="'+name+'"]');
+      const err   = qs('[data-err="'+name+'"]');
+      if (!input || !err) return;
+      if (show){
+        input.classList.add('ring-error','border-red-300');
+        input.classList.remove('border-slate-300');
+        err.classList.remove('hidden');
+      } else {
+        input.classList.remove('ring-error','border-red-300');
+        input.classList.add('border-slate-300');
+        err.classList.add('hidden');
+      }
+    }
+
+    function validate(){
+      const data = Object.fromEntries(new FormData(form).entries());
+      let ok = true;
+      if (!data.identity || (!isEmail(data.identity) && data.identity.length < 3)) { setError('identity', true); ok = false; } else setError('identity', false);
+      return ok;
+    }
+
+    let timerId = null;
+    function startCountdown(seconds = 30){
+      let left = seconds;
+      countdownEl.textContent = String(left);
+      resendBtn.disabled = true;
+      resendBtn.classList.add('opacity-60','cursor-not-allowed');
+      timerId && clearInterval(timerId);
+      timerId = setInterval(() => {
+        left -= 1;
+        countdownEl.textContent = String(left);
+        if (left <= 0){
+          clearInterval(timerId);
+          resendBtn.disabled = false;
+          resendBtn.classList.remove('opacity-60','cursor-not-allowed');
+          countdownEl.textContent = '0';
+        }
+      }, 1000);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      qs('#resultJson').textContent = JSON.stringify({ ...payload, event: 'forgot-password' }, null, 2);
+      qs('#result').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      startCountdown(30);
+    });
+
+    // Resend
+    resendBtn.addEventListener('click', () => {
+      if (resendBtn.disabled) return;
+      startCountdown(30);
+      alert('Demo: resend triggered');
+    });
+
+    // New request
+    qs('#newRequestBtn').addEventListener('click', () => {
+      qs('#result').classList.add('hidden');
+      form.reset();
+      // Clear errors
+      setError('identity', false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

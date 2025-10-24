@@ -1,0 +1,134 @@
+<%- include('../../partials/navbar') %>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Minds — Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; }
+    .brand-gradient { background: linear-gradient(90deg, #1e3a8a, #2563eb, #1e3a8a); }
+    .card { background: rgba(255,255,255,.96); backdrop-filter: saturate(160%) blur(6px); }
+    .ring-error { box-shadow: 0 0 0 2px rgba(239, 68, 68, .35); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Hero -->
+  <section class="brand-gradient text-white px-6 py-14 sm:py-20">
+    <div class="mx-auto max-w-md text-center">
+      <h1 class="text-3xl sm:text-4xl font-extrabold">Welcome back</h1>
+      <p class="mt-3 text-blue-50/90">Sign in to your Tech Minds account</p>
+    </div>
+  </section>
+
+  <!-- Login Card -->
+  <main class="px-6 -mt-10 pb-20">
+    <div class="mx-auto max-w-md">
+      <div class="card rounded-2xl shadow-xl border border-blue-100 p-6">
+        <form id="loginForm" class="grid grid-cols-1 gap-5" novalidate>
+          <!-- Username / Email -->
+          <div class="flex flex-col">
+            <label for="identity" class="mb-1.5 text-sm font-medium text-slate-700">Username or Email <span class="text-blue-700">*</span></label>
+            <input id="identity" name="identity" type="text" placeholder="e.g. ada.okoye or you@example.com" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
+            <p data-err="identity" class="mt-1 hidden text-xs text-red-600">Enter your username or a valid email.</p>
+          </div>
+
+          <!-- Password -->
+          <div class="flex flex-col">
+            <label for="password" class="mb-1.5 text-sm font-medium text-slate-700">Password <span class="text-blue-700">*</span></label>
+            <div class="relative">
+              <input id="password" name="password" type="password" placeholder="Your password" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm pr-11 focus:outline-none focus:border-blue-400" />
+              <button type="button" id="togglePwd" class="absolute inset-y-0 right-0 px-3 text-slate-500 text-sm">Show</button>
+            </div>
+            <p data-err="password" class="mt-1 hidden text-xs text-red-600">Password is required.</p>
+          </div>
+
+          <!-- Remember / Forgot -->
+          <div class="flex items-center justify-between">
+            <label class="inline-flex items-center gap-2 text-sm">
+              <input id="remember" name="remember" type="checkbox" class="accent-blue-600">
+              <span>Remember me</span>
+            </label>
+            <a href="/student/forgot" class="text-sm font-medium text-blue-700 hover:text-blue-800" >Forgot password?</a>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="submitBtn" class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/50">Sign in</button>
+        </form>
+
+        <!-- Divider -->
+        <div class="my-5 flex items-center gap-3 text-xs text-slate-500">
+          <div class="h-px flex-1 bg-slate-200"></div>
+          <span>or</span>
+          <div class="h-px flex-1 bg-slate-200"></div>
+        </div>
+
+        <!-- Link to Registration -->
+        <p class="text-center text-sm text-slate-600">Don't have an account? 
+          <a href="/student/register" class="font-medium text-blue-700 hover:text-blue-800" >Create one</a>
+        </p>
+      </div>
+
+      <!-- Result / Demo output -->
+      <div id="result" class="hidden mt-6 card rounded-2xl shadow-xl border border-blue-100 p-6">
+        <h3 class="text-lg font-semibold">Login payload (demo)</h3>
+        <p class="text-sm text-slate-600">Frontend-only — not sent to a server.</p>
+        <pre id="resultJson" class="mt-3 max-h-60 overflow-auto rounded-xl bg-slate-900 p-4 text-xs leading-relaxed text-blue-100"></pre>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+
+    function qs(sel, el=document){ return el.querySelector(sel); }
+
+    function setError(name, show){
+      const input = qs('[name="'+name+'"]');
+      const err   = qs('[data-err="'+name+'"]');
+      if (!input || !err) return;
+      if (show){
+        input.classList.add('ring-error','border-red-300');
+        input.classList.remove('border-slate-300');
+        err.classList.remove('hidden');
+      } else {
+        input.classList.remove('ring-error','border-red-300');
+        input.classList.add('border-slate-300');
+        err.classList.add('hidden');
+      }
+    }
+
+    function isEmail(v){ return /\S+@\S+\.\S+/.test(v); }
+
+    function validate(){
+      const data = Object.fromEntries(new FormData(form).entries());
+      let ok = true;
+      if (!data.identity || (!isEmail(data.identity) && data.identity.length < 3)) { setError('identity', true); ok = false; } else setError('identity', false);
+      if (!data.password) { setError('password', true); ok = false; } else setError('password', false);
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      qs('#resultJson').textContent = JSON.stringify(payload, null, 2);
+      qs('#result').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Show / hide password
+    qs('#togglePwd').addEventListener('click', () => {
+      const inp = qs('#password');
+      const btn = qs('#togglePwd');
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      btn.textContent = show ? 'Hide' : 'Show';
+    });
+  </script>
+</body>
+</html>

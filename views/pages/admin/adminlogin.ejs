@@ -1,0 +1,166 @@
+<%- include('../../partials/navbar') %>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Minds — Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    html { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    .brand { background: linear-gradient(90deg,#0f172a,#0ea5e9); } /* dark → blue */
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px) saturate(140%); }
+    .err-ring { box-shadow: 0 0 0 3px rgba(239,68,68,0.18); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-900 text-slate-100">
+  <main class="min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Left: Branding -->
+      <section class="hidden md:flex flex-col justify-center items-start gap-6 rounded-2xl p-8 brand text-white shadow-xl">
+        <div class="space-y-2">
+          <h1 class="text-3xl font-extrabold">Tech Minds — Admin</h1>
+          <p class="text-slate-200/90 max-w-sm">Sign in to the admin dashboard to manage courses, students, and site settings.</p>
+        </div>
+        <div class="mt-4 text-sm text-slate-100/80">
+          <p><strong>Security tip:</strong> Use a strong password and enable 2FA.</p>
+        </div>
+      </section>
+
+      <!-- Right: Form -->
+      <section class="glass rounded-2xl p-6 md:p-10 shadow-lg">
+        <h2 class="text-2xl font-semibold text-white mb-1">Admin sign in</h2>
+        <p class="text-sm text-slate-200/80 mb-6">Enter your admin credentials to continue.</p>
+
+        <form id="adminForm" class="space-y-4" novalidate>
+          <div>
+            <label for="identity" class="block text-xs text-slate-200 mb-1">Username or Email</label>
+            <input id="identity" name="identity" type="text" autocomplete="username" placeholder="admin or admin@example.com"
+              class="w-full rounded-lg border border-slate-700 bg-transparent px-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-blue-400" />
+            <p data-err="identity" class="mt-1 hidden text-xs text-rose-400">Enter a username or valid email (min 3 chars).</p>
+          </div>
+
+          <div>
+            <label for="password" class="block text-xs text-slate-200 mb-1">Password</label>
+            <div class="relative">
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••"
+                class="w-full rounded-lg border border-slate-700 bg-transparent px-3 py-2 pr-28 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-blue-400" />
+              <button type="button" id="togglePwd" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-3 py-1 text-xs bg-slate-800/60 hover:bg-slate-800/80">Show</button>
+            </div>
+            <p data-err="password" class="mt-1 hidden text-xs text-rose-400">Password is required (min 6 characters).</p>
+          </div>
+
+          <div>
+            <label for="otp" class="block text-xs text-slate-200 mb-1">2FA Code (optional)</label>
+            <input id="otp" name="otp" type="text" inputmode="numeric" placeholder="123456"
+              class="w-full rounded-lg border border-slate-700 bg-transparent px-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-blue-400" />
+            <p class="mt-1 text-xs text-slate-400">If your account uses 2FA, enter the code from your authenticator app or SMS.</p>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <label class="inline-flex items-center gap-2 text-sm">
+              <input id="remember" name="remember" type="checkbox" class="accent-blue-400" />
+              <span class="text-slate-200/90">Remember me</span>
+            </label>
+            <a href="#" id="forgotLink" class="text-sm text-blue-300 hover:underline" onclick="event.preventDefault()">Forgot password?</a>
+          </div>
+
+          <div class="flex gap-3 items-center">
+            <button id="submitBtn" type="submit" class="flex-1 rounded-lg bg-blue-500 hover:bg-blue-600 px-4 py-2 text-sm font-semibold text-white">Sign in</button>
+            <button id="demoBtn" type="button" class="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200/90">Demo</button>
+          </div>
+
+          <p id="formNote" class="text-xs text-slate-400 mt-1">This is frontend-only demo — no request is sent. Replace with real POST to /admin/login.</p>
+        </form>
+
+        <!-- Demo output -->
+        <div id="result" class="hidden mt-6 rounded-lg bg-slate-800/40 p-3 text-xs text-slate-100">
+          <strong class="block text-sm mb-2">Payload (demo)</strong>
+          <pre id="payload" class="whitespace-pre-wrap text-xs"></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Basic client-side behavior & validation
+    const form = document.getElementById('adminForm');
+    const qs = (s, e = document) => e.querySelector(s);
+    const togglePwd = qs('#togglePwd');
+    const result = qs('#result');
+    const payloadEl = qs('#payload');
+    const demoBtn = qs('#demoBtn');
+
+    function setErr(name, show, msg) {
+      const input = qs('[name="'+name+'"]');
+      const errEl = qs('[data-err="'+name+'"]');
+      if (!input) return;
+      if (show) {
+        input.classList.add('err-ring');
+        if (errEl) { errEl.textContent = msg || errEl.textContent; errEl.classList.remove('hidden'); }
+      } else {
+        input.classList.remove('err-ring');
+        if (errEl) errEl.classList.add('hidden');
+      }
+    }
+
+    function isEmail(v) { return /\S+@\S+\.\S+/.test(v); }
+
+    function validate() {
+      const fd = new FormData(form);
+      const identity = (fd.get('identity') || '').toString().trim();
+      const password = (fd.get('password') || '').toString();
+      let ok = true;
+
+      if (!identity || (!isEmail(identity) && identity.length < 3)) { setErr('identity', true, 'Enter username or valid email (min 3 chars).'); ok = false; } else setErr('identity', false);
+      if (!password || password.length < 6) { setErr('password', true, 'Password required (min 6 chars).'); ok = false; } else setErr('password', false);
+
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      const fd = new FormData(form);
+      const payload = {
+        identity: fd.get('identity'),
+        password: fd.get('password'),
+        otp: fd.get('otp') || null,
+        remember: !!fd.get('remember')
+      };
+
+      // Demo: show payload. Replace this with fetch('/admin/login', {...}) when ready.
+      payloadEl.textContent = JSON.stringify(payload, null, 2);
+      result.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Example redirect simulation (comment out during real backend integration)
+      // setTimeout(() => { window.location.href = '/admin/dashboard'; }, 900);
+    });
+
+    // Toggle password visibility
+    togglePwd.addEventListener('click', () => {
+      const pw = qs('#password');
+      const show = pw.type === 'password';
+      pw.type = show ? 'text' : 'password';
+      togglePwd.textContent = show ? 'Hide' : 'Show';
+    });
+
+    // Demo button pre-fills admin credentials (front-end only)
+    demoBtn.addEventListener('click', () => {
+      qs('#identity').value = 'admin@techminds.academy';
+      qs('#password').value = 'Admin123!';
+      qs('#otp').value = '';
+    });
+
+    // Simple keyboard shortcut: Enter submits; Escape clears result
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') result.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<%- include('../../partials/navbar') %>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Minds — Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; }
+    .brand-grad { background: linear-gradient(90deg, #0b1b4a, #2563eb, #0b1b4a); }
+    .glass { background: rgba(255,255,255,.06); backdrop-filter: blur(8px) saturate(140%); }
+    .card { background: rgba(2,6,23,.7); border: 1px solid rgba(148,163,184,.15); }
+    .chip { background: rgba(59,130,246,.12); color: #bfdbfe; }
+    .scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+    .scrollbar::-webkit-scrollbar-thumb { background: rgba(148,163,184,.35); border-radius: 8px; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-900 text-slate-100">
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full lg:translate-x-0 transition-transform duration-200 bg-slate-950 border-r border-slate-800">
+    <div class="h-16 brand-grad flex items-center px-5">
+      <div class="h-9 w-9 rounded-lg bg-white/10 grid place-items-center mr-2">
+        <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 10-10-5L2 10l10 5 10-5z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg>
+      </div>
+      <span class="font-semibold">Tech Minds — Admin</span>
+    </div>
+
+    <nav class="px-3 py-4 space-y-1 text-slate-200">
+      <button class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800/70" data-route="dashboard">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h8V3H3z"/><path d="M13 21h8V3h-8z"/><path d="M3 21h8v-6H3z"/></svg>
+        Overview
+      </button>
+      <button class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800/70" data-route="students">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Students
+      </button>
+      <button class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800/70" data-route="courses">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22h11A2.5 2.5 0 0 0 20 19.5V6H4z"/><path d="M4 6V4a2 2 0 0 1 2-2h8l6 6"/></svg>
+        Courses
+      </button>
+      <button class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800/70" data-route="admissions">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 10-10-5L2 10l10 5 10-5z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg>
+        Admissions
+      </button>
+      <button class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800/70" data-route="settings">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1v.1a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-.4-1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.82-.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1-.4H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0 .33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6c.3 0 .6-.1 1-.4a1.7 1.7 0 0 0 1-.6V3a2 2 0 1 1 4 0v.1c0 .4.2.7.4 1 .3.3.6.4 1 .4a1.7 1.7 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.2.2-.3.5-.33.82A1.7 1.7 0 0 0 19.4 9c0 .4.1.7.4 1 .3.3.6.4 1 .4H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1 .4c-.3.3-.4.6-.4 1Z"/></svg>
+        Settings
+      </button>
+    </nav>
+    <div class="absolute bottom-0 inset-x-0 p-4 border-t border-slate-800 text-xs text-slate-400">
+      <p>Logged in as <span class="text-slate-200 font-medium">admin@techminds</span></p>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="lg:pl-72">
+    <!-- Topbar -->
+    <header class="h-16 sticky top-0 z-30 bg-slate-900/80 backdrop-blur border-b border-slate-800 flex items-center justify-between px-4 sm:px-6">
+      <div class="flex items-center gap-3">
+        <button id="menuBtn" class="lg:hidden rounded-lg border border-slate-700 px-3 py-2 text-sm">Menu</button>
+        <span class="hidden sm:inline text-slate-300">Dashboard</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <input id="globalSearch" placeholder="Search students, courses..." class="hidden md:block rounded-lg border border-slate-700 bg-slate-950/60 px-3 py-1.5 text-sm placeholder:text-slate-500 focus:outline-none focus:border-blue-500" />
+        <button id="newBtn" class="rounded-lg bg-blue-600 hover:bg-blue-700 px-3 py-2 text-sm font-semibold">New</button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="p-4 sm:p-6 space-y-6">
+      <!-- KPIs -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div class="card rounded-2xl p-4">
+          <div class="text-sm text-slate-400">New Applications</div>
+          <div class="mt-2 flex items-end justify-between">
+            <div class="text-3xl font-bold">48</div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">+12% week</span>
+          </div>
+        </div>
+        <div class="card rounded-2xl p-4">
+          <div class="text-sm text-slate-400">Active Students</div>
+          <div class="mt-2 flex items-end justify-between">
+            <div class="text-3xl font-bold">312</div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">+8 this month</span>
+          </div>
+        </div>
+        <div class="card rounded-2xl p-4">
+          <div class="text-sm text-slate-400">Courses Running</div>
+          <div class="mt-2 flex items-end justify-between">
+            <div class="text-3xl font-bold">9</div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">3 cohorts</span>
+          </div>
+        </div>
+        <div class="card rounded-2xl p-4">
+          <div class="text-sm text-slate-400">Revenue (₦)</div>
+          <div class="mt-2 flex items-end justify-between">
+            <div class="text-3xl font-bold">12.4m</div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">Est.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trends (pure CSS bars) -->
+      <section class="card rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold">Weekly Applications</h3>
+          <div class="text-xs text-slate-400">Last 8 weeks</div>
+        </div>
+        <div class="scrollbar overflow-x-auto">
+          <div class="grid grid-cols-8 gap-3 min-w-[560px]">
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 40px"></div>
+              <span class="text-xs text-slate-400">W1</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 56px"></div>
+              <span class="text-xs text-slate-400">W2</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 70px"></div>
+              <span class="text-xs text-slate-400">W3</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 64px"></div>
+              <span class="text-xs text-slate-400">W4</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 82px"></div>
+              <span class="text-xs text-slate-400">W5</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 68px"></div>
+              <span class="text-xs text-slate-400">W6</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 92px"></div>
+              <span class="text-xs text-slate-400">W7</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-8 rounded bg-blue-600" style="height: 76px"></div>
+              <span class="text-xs text-slate-400">W8</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Applications + Quick Actions -->
+      <section class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div class="xl:col-span-2 card rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold">Recent Applications</h3>
+            <div class="text-xs text-slate-400">View all</div>
+          </div>
+          <div class="overflow-x-auto scrollbar">
+            <table class="min-w-full text-sm">
+              <thead class="text-slate-300">
+                <tr class="text-left">
+                  <th class="py-2 pr-3 font-semibold">Name</th>
+                  <th class="py-2 pr-3 font-semibold">Course</th>
+                  <th class="py-2 pr-3 font-semibold">Format</th>
+                  <th class="py-2 pr-3 font-semibold">Date</th>
+                  <th class="py-2 pr-3 font-semibold">Status</th>
+                  <th class="py-2 font-semibold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60">
+                <!-- Rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card rounded-2xl p-4 space-y-3">
+          <h3 class="font-semibold">Quick Actions</h3>
+          <button class="w-full rounded-lg bg-blue-600 hover:bg-blue-700 px-3 py-2 text-sm font-semibold" id="qaAddStudent">Add student</button>
+          <button class="w-full rounded-lg bg-slate-800 hover:bg-slate-700 px-3 py-2 text-sm" id="qaCreateCourse">Create course</button>
+          <button class="w-full rounded-lg bg-slate-800 hover:bg-slate-700 px-3 py-2 text-sm" id="qaExportCsv">Export CSV</button>
+          <p class="text-xs text-slate-400">Tip: Use the global search to quickly find records.</p>
+        </div>
+      </section>
+
+      <!-- Courses -->
+      <section class="card rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold">Courses</h3>
+          <div class="text-xs text-slate-400">9 running</div>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- Course chips -->
+          <div class="rounded-xl border border-slate-800 p-3 flex items-center justify-between">
+            <div>
+              <div class="font-medium">Web Development</div>
+              <div class="text-xs text-slate-400">Cohort Nov • 12 weeks</div>
+            </div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">34 students</span>
+          </div>
+          <div class="rounded-xl border border-slate-800 p-3 flex items-center justify-between">
+            <div>
+              <div class="font-medium">App Development</div>
+              <div class="text-xs text-slate-400">Cohort Nov • 12 weeks</div>
+            </div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">27 students</span>
+          </div>
+          <div class="rounded-xl border border-slate-800 p-3 flex items-center justify-between">
+            <div>
+              <div class="font-medium">Cloud Computing</div>
+              <div class="text-xs text-slate-400">Weekend • 8 weeks</div>
+            </div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">18 students</span>
+          </div>
+          <div class="rounded-xl border border-slate-800 p-3 flex items-center justify-between">
+            <div>
+              <div class="font-medium">Data & Analytics</div>
+              <div class="text-xs text-slate-400">Evening • 10 weeks</div>
+            </div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">22 students</span>
+          </div>
+          <div class="rounded-xl border border-slate-800 p-3 flex items-center justify-between">
+            <div>
+              <div class="font-medium">Coding for Kids</div>
+              <div class="text-xs text-slate-400">Sat • 6 weeks</div>
+            </div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">16 students</span>
+          </div>
+          <div class="rounded-xl border border-slate-800 p-3 flex items-center justify-between">
+            <div>
+              <div class="font-medium">Digital Marketing</div>
+              <div class="text-xs text-slate-400">Evening • 8 weeks</div>
+            </div>
+            <span class="chip px-2 py-0.5 rounded-full text-xs">12 students</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="relative mx-auto mt-24 w-full max-w-lg rounded-2xl bg-slate-950 border border-slate-800 p-6">
+      <div class="flex items-center justify-between">
+        <h3 class="font-semibold">Add quick note</h3>
+        <button id="modalClose" class="rounded-md px-2 py-1 text-sm bg-slate-800">Close</button>
+      </div>
+      <textarea id="noteInput" rows="5" class="mt-4 w-full rounded-lg border border-slate-800 bg-transparent p-3" placeholder="Type something..."></textarea>
+      <div class="mt-3 flex justify-end gap-2">
+        <button id="modalSave" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold hover:bg-blue-700">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      const open = !sidebar.classList.contains('-translate-x-full');
+      sidebar.classList.toggle('-translate-x-full', open);
+    });
+
+    // Routes (demo only)
+    document.querySelectorAll('[data-route]').forEach(btn => {
+      btn.addEventListener('click', () => alert('Demo: navigate to ' + btn.dataset.route));
+    });
+
+    // Fake table data
+    const rows = [
+      { name: 'Adaeze Okoye', course: 'Web Development', format: 'Hybrid', date: '2025-10-18', status: 'New' },
+      { name: 'Michael Yusuf', course: 'Data & Analytics', format: 'Online', date: '2025-10-20', status: 'Review' },
+      { name: 'Chinedu Obi', course: 'Cloud Computing', format: 'On-campus', date: '2025-10-22', status: 'Accepted' },
+      { name: 'Rachael Musa', course: 'App Development', format: 'Hybrid', date: '2025-10-22', status: 'New' },
+    ];
+
+    const tbody = document.querySelector('tbody');
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="py-2 pr-3">${r.name}</td>
+        <td class="py-2 pr-3">${r.course}</td>
+        <td class="py-2 pr-3">${r.format}</td>
+        <td class="py-2 pr-3 text-slate-300">${r.date}</td>
+        <td class="py-2 pr-3">
+          <span class="px-2 py-0.5 rounded-full text-xs ${r.status==='Accepted' ? 'bg-green-600/20 text-green-200' : r.status==='Review' ? 'bg-yellow-600/20 text-yellow-200' : 'bg-blue-600/20 text-blue-200'}">${r.status}</span>
+        </td>
+        <td class="py-2 text-right">
+          <button class="rounded-md border border-slate-700 px-2 py-1 text-xs hover:bg-slate-800">View</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+
+    // Global search (simple filter)
+    const search = document.getElementById('globalSearch');
+    search && search.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      Array.from(tbody.children).forEach(tr => {
+        const txt = tr.textContent.toLowerCase();
+        tr.classList.toggle('hidden', !txt.includes(q));
+      });
+    });
+
+    // Quick actions
+    document.getElementById('qaAddStudent').addEventListener('click', () => openModal());
+    document.getElementById('qaCreateCourse').addEventListener('click', () => alert('Demo: open Create Course form'));
+    document.getElementById('qaExportCsv').addEventListener('click', () => exportTableToCSV('applications.csv'));
+
+    // Modal helpers
+    const modal = document.getElementById('modal');
+    function openModal(){ modal.classList.remove('hidden'); document.getElementById('noteInput').focus(); }
+    function closeModal(){ modal.classList.add('hidden'); }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalSave').addEventListener('click', () => { alert('Saved note (demo)'); closeModal(); });
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // CSV export (simple)
+    function exportTableToCSV(filename) {
+      const rows = Array.from(document.querySelectorAll('table tr'))
+        .map(tr => Array.from(tr.querySelectorAll('th, td')).map(td => '"' + td.innerText.replace(/"/g, '""') + '"').join(','))
+        .join('\n');
+      const blob = new Blob([rows], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Minds — Navbar Partial (Blue)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    .nav-active { color: #1d4ed8 !important; }
+    .nav-underline { position: relative; }
+    .nav-underline::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 9999px; background: #2563eb; transform: scaleX(0); transform-origin: left; transition: transform .2s ease; }
+    .nav-underline:hover::after, .nav-underline.nav-active::after { transform: scaleX(1); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50">
+
+  <!-- ================= Navbar Partial ================= -->
+  <!-- Copy from <nav>...</nav> (and the <script> at the end) into any page. Tailwind CDN required. -->
+  <nav id="tmaNav" class="fixed inset-x-0 top-0 z-50 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-slate-200 transition-shadow">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="flex h-16 items-center justify-between">
+        <!-- Brand -->
+        <a href="/" class="flex items-center gap-2 shrink-0">
+          <!-- Logo placeholder -->
+          <div class="grid h-9 w-9 place-items-center rounded-xl bg-blue-600 text-white shadow-sm">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 10-10-5L2 10l10 5 10-5z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg>
+          </div>
+          <span class="logo-text text-base font-semibold text-slate-900">Tech Minds Academy</span>
+          <!-- Verification badge -->
+          <svg aria-hidden class="h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25l2.122 2.122 3-.372 1.06 2.828 2.829 1.06-.372 3L22.5 12l-1.933 1.112.372 3-2.829 1.06-1.06 2.828-3-.372L12 21.75l-2.122-2.122-3 .372-1.06-2.828-2.829-1.06.372-3L1.5 12l1.933-1.112-.372-3 2.829-1.06 1.06-2.828 3 .372L12 2.25zm-1.06 11.56l-2-2a.75.75 0 011.06-1.06l1.47 1.47 3.53-3.53a.75.75 0 111.06 1.06l-4.06 4.06a.75.75 0 01-1.06 0z"/></svg>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden items-center gap-6 md:flex">
+          <a href="/" class="nav-link nav-underline text-sm text-slate-700 hover:text-slate-900">Home</a>
+          <a href="/student/register" class="nav-link nav-underline text-sm text-slate-700 hover:text-slate-900">Create Student Account</a>
+          <!-- <a href="/student/login" class="nav-link nav-underline text-sm text-slate-700 hover:text-slate-900">Login Portal</a> -->
+          <a href="/news" class="nav-link nav-underline text-sm text-slate-700 hover:text-slate-900">Check Updates/ School News</a>
+          <a href="/payment" class="nav-link nav-underline text-sm text-slate-700 hover:text-slate-900">Payments</a>
+          <a href="https://techmindsacademy.org" class="nav-link nav-underline text-sm text-slate-700 hover:text-slate-900">School Website</a>
+        </div>
+
+        <!-- Right CTA -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/student/login" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Login</a>
+          <a href="https://techmindsacademy.org/application" class="rounded-xl bg-blue-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">Apply Now</a>
+        </div>
+
+        <!-- Mobile toggle -->
+        <button id="navToggle" class="md:hidden inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white p-2 text-slate-600 hover:bg-slate-50" aria-label="Toggle menu">
+          <svg id="iconOpen" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <svg id="iconClose" class="h-5 w-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile panel -->
+    <div id="mobilePanel" class="md:hidden hidden border-t border-slate-200 bg-white/95 backdrop-blur">
+      <div class="mx-auto max-w-6xl px-4 py-3 space-y-1">
+        <a href="/" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">Home</a>
+        <a href="/student/register" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">Create Student Account</a>
+        <a href="/news" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">Check Updates/ School News</a>
+        <a href="/payment" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">Payments</a>
+        <a href="https://techmindsacademy.org" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">School Website</a>
+        <!-- <a href="/contact" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">Contact</a> -->
+        <div class="pt-2 flex items-center gap-3">
+          <a href="/student/login" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-50">Login</a>
+          <a href="https://techmindsacademy.org/application" class="w-full rounded-xl bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-700">Apply</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <br><br><br>
+  <!-- =============== /Navbar Partial =============== -->
+
+
+  </section>
+
+  <script>
+    // Mobile toggle
+    const navToggle = document.getElementById('navToggle');
+    const mobilePanel = document.getElementById('mobilePanel');
+    const iconOpen = document.getElementById('iconOpen');
+    const iconClose = document.getElementById('iconClose');
+
+    navToggle.addEventListener('click', () => {
+      const open = mobilePanel.classList.contains('hidden');
+      mobilePanel.classList.toggle('hidden', !open);
+      iconOpen.classList.toggle('hidden', open);
+      iconClose.classList.toggle('hidden', !open);
+    });
+
+    // Add shadow on scroll
+    const tmaNav = document.getElementById('tmaNav');
+    const onScroll = () => {
+      if (window.scrollY > 2) {
+        tmaNav.classList.add('shadow');
+      } else {
+        tmaNav.classList.remove('shadow');
+      }
+    };
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+
+    // Active link by pathname
+    const path = location.pathname.replace(/\/$/, '');
+    document.querySelectorAll('.nav-link').forEach(a => {
+      const href = a.getAttribute('href').replace(/\/$/, '');
+      if (href && href !== '/' && path.startsWith(href)) a.classList.add('nav-active');
+      if (path === '/' && href === '/') a.classList.add('nav-active');
+    });
+  </script>
+</body>
+</html>

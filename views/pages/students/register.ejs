@@ -1,0 +1,189 @@
+<%- include('../../partials/navbar') %>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Minds Academy — Simple Registration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; }
+    .brand-gradient { background: linear-gradient(90deg, #1e3a8a, #2563eb, #1e3a8a); }
+    .card { background: rgba(255,255,255,.96); backdrop-filter: saturate(160%) blur(6px); }
+    .ring-error { box-shadow: 0 0 0 2px rgba(239, 68, 68, .35); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Hero -->
+  <section class="brand-gradient text-white px-6 py-14 sm:py-20">
+    <div class="mx-auto max-w-xl text-center">
+      <h1 class="text-3xl sm:text-4xl font-extrabold">Student Registration</h1>
+      <p class="mt-3 text-blue-50/90">Fill in your details to create your student profile.</p>
+    </div>
+  </section>
+
+  <!-- Simple Form Card -->
+  <main class="px-6 -mt-10 pb-20">
+    <div class="mx-auto max-w-xl">
+      <div class="card rounded-2xl shadow-xl border border-blue-100">
+        <form id="registrationForm" class="grid grid-cols-1 gap-5 p-6" novalidate>
+          <!-- Name -->
+          <div class="flex flex-col">
+            <label for="name" class="mb-1.5 text-sm font-medium text-slate-700">Last name <span class="text-blue-700">*</span></label>
+            <input id="name" name="name" type="text" placeholder="e.g. Okoye" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
+            <p data-err="name" class="mt-1 hidden text-xs text-red-600">Please enter your last name.</p>
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-col">
+            <label for="email" class="mb-1.5 text-sm font-medium text-slate-700">Email <span class="text-blue-700">*</span></label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
+            <p data-err="email" class="mt-1 hidden text-xs text-red-600">Enter a valid email address.</p>
+          </div>
+
+          <!-- Phone -->
+          <div class="flex flex-col">
+            <label for="phone" class="mb-1.5 text-sm font-medium text-slate-700">Phone number <span class="text-blue-700">*</span></label>
+            <input id="phone" name="phone" type="tel" placeholder="e.g. 0802 123 4567" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
+            <p data-err="phone" class="mt-1 hidden text-xs text-red-600">Enter a valid phone number (10+ digits).</p>
+          </div>
+          <!-- ID -->
+          <div class="flex flex-col">
+            <label for="id" class="mb-1.5 text-sm font-medium text-slate-700">ID number <span class="text-blue-700">*</span></label>
+            <input id="id" name="phone" type="number" placeholder="e.g. TMA-7677" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
+            <p data-err="id" class="mt-1 hidden text-xs text-red-600">Enter a valid phone number (10+ digits).</p>
+          </div>
+
+          <!-- Course -->
+          <div class="flex flex-col">
+            <label for="course" class="mb-1.5 text-sm font-medium text-slate-700">Course <span class="text-blue-700">*</span></label>
+            <select id="course" name="course" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400">
+              <option value="">Select a course</option>
+              <option>Web Development</option>
+              <option>App Development</option>
+              <option>Cloud Computing</option>
+              <option>Data &amp; Analytics</option>
+              <option>Coding for Kids</option>
+              <option>Digital Marketing</option>
+            </select>
+            <p data-err="course" class="mt-1 hidden text-xs text-red-600">Please select a course.</p>
+          </div>
+
+          <!-- Username -->
+          <div class="flex flex-col">
+            <label for="username" class="mb-1.5 text-sm font-medium text-slate-700">Username <span class="text-blue-700">*</span></label>
+            <input id="username" name="username" type="text" placeholder="e.g. ada.okoye" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
+            <p data-err="username" class="mt-1 hidden text-xs text-red-600">Choose a username (min 3 characters).</p>
+          </div>
+
+          <!-- Password -->
+          <div class="flex flex-col">
+            <label for="password" class="mb-1.5 text-sm font-medium text-slate-700">Password <span class="text-blue-700">*</span></label>
+            <div class="relative">
+              <input id="password" name="password" type="password" placeholder="Create a password" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm pr-11 focus:outline-none focus:border-blue-400" />
+              <button type="button" id="togglePwd" class="absolute inset-y-0 right-0 px-3 text-slate-500 text-sm">Show</button>
+            </div>
+            <p class="mt-1 text-xs text-slate-500">At least 6 characters.</p>
+            <p data-err="password" class="mt-1 hidden text-xs text-red-600">Password must be 6+ characters.</p>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-between pt-2">
+            <button type="button" id="resetBtn" class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium shadow-sm hover:bg-slate-50">Reset</button>
+            <button type="submit" id="submitBtn" class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/50">Create account</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tiny receipt -->
+      <div id="receipt" class="hidden mt-6 card rounded-2xl shadow-xl border border-blue-100 p-6">
+        <h3 class="text-lg font-semibold">Registration preview</h3>
+        <p class="text-sm text-slate-600">Frontend-only — data not sent anywhere.</p>
+        <pre id="receiptJson" class="mt-3 max-h-72 overflow-auto rounded-xl bg-slate-900 p-4 text-xs leading-relaxed text-blue-100"></pre>
+        <div class="mt-3 flex gap-3">
+          <button id="copyBtn" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">Copy JSON</button>
+          <button id="newBtn" class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">New registration</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+
+    function qs(sel, el=document){ return el.querySelector(sel); }
+
+    function setError(name, show, message){
+      const input = qs('[name="'+name+'"]');
+      const err   = qs('[data-err="'+name+'"]');
+      if (!input || !err) return;
+      if (show){
+        input.classList.add('ring-error','border-red-300');
+        input.classList.remove('border-slate-300');
+        if (message) err.textContent = message;
+        err.classList.remove('hidden');
+      } else {
+        input.classList.remove('ring-error','border-red-300');
+        input.classList.add('border-slate-300');
+        err.classList.add('hidden');
+      }
+    }
+
+    function validate(){
+      const data = Object.fromEntries(new FormData(form).entries());
+      let ok = true;
+
+      if (!data.name?.trim()) { setError('name', true); ok = false; } else setError('name', false);
+      const emailOk = /\S+@\S+\.\S+/.test(data.email || '');
+      if (!emailOk) { setError('email', true); ok = false; } else setError('email', false);
+      const digits = (data.phone || '').replace(/\D/g,'');
+      if (digits.length < 10) { setError('phone', true); ok = false; } else setError('phone', false);
+      if (!data.course) { setError('course', true); ok = false; } else setError('course', false);
+      if (!data.username || data.username.length < 3) { setError('username', true); ok = false; } else setError('username', false);
+      if (!data.password || data.password.length < 6) { setError('password', true); ok = false; } else setError('password', false);
+
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      qs('#receiptJson').textContent = JSON.stringify(payload, null, 2);
+      qs('#receipt').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Reset
+    qs('#resetBtn').addEventListener('click', () => {
+      form.reset();
+      ['name','email','phone','course','username','password'].forEach(n => setError(n, false));
+    });
+
+    // Show / hide password
+    qs('#togglePwd').addEventListener('click', () => {
+      const inp = qs('#password');
+      const btn = qs('#togglePwd');
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      btn.textContent = show ? 'Hide' : 'Show';
+    });
+
+    // Copy JSON
+    qs('#copyBtn').addEventListener('click', async () => {
+      try{ await navigator.clipboard.writeText(qs('#receiptJson').textContent); alert('Copied'); }
+      catch{ alert('Copy failed.'); }
+    });
+
+    // New
+    qs('#newBtn').addEventListener('click', () => {
+      qs('#receipt').classList.add('hidden');
+      form.reset();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
