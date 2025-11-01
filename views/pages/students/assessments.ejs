@@ -1,0 +1,55 @@
+<%- include('../../partials/navbar') %>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assessment Centre • TechMinds Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    html { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <main class="mx-auto max-w-4xl px-4 pt-24 pb-16">
+    <header class="mb-8">
+      <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Assessment Centre</p>
+      <h1 class="mt-2 text-3xl font-bold text-slate-900">Retake & Exam Resources</h1>
+      <p class="mt-3 max-w-2xl text-sm text-slate-600">Find the checklist, retake booking form, and key dates for upcoming TechMinds assessments.</p>
+    </header>
+
+    <section class="space-y-6">
+      <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-slate-900">Next retake window</h2>
+        <p class="mt-2 text-sm text-slate-600">10 – 14 July 2024. Slots available online and at the Lagos Innovation Hub.</p>
+        <a href="https://forms.gle/techminds-assessment-retake" class="mt-4 inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700" target="_blank" rel="noopener">Book a retake slot</a>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-slate-900">Assessment checklist</h2>
+        <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-600">
+          <li>Confirm your student ID and registered module.</li>
+          <li>Review the proctoring rules and grading guide.</li>
+          <li>Arrive 15 minutes before the scheduled start time.</li>
+        </ul>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="https://techmindsacademy.org/downloads/assessment-checklist.pdf" class="inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50" target="_blank" rel="noopener">Download PDF checklist</a>
+          <a href="mailto:assessment@techminds.academy" class="inline-flex items-center text-sm font-semibold text-blue-700 hover:text-blue-800">Ask the assessment desk →</a>
+        </div>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-slate-900">Need help preparing?</h2>
+        <p class="mt-2 text-sm text-slate-600">Join the academic support clinic or watch recorded revision sessions.</p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="/student/courses" class="inline-flex items-center rounded-xl bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm hover:bg-blue-100">See revision classes</a>
+          <a href="https://techmindsacademy.org/learning-clinic" class="inline-flex items-center text-sm font-semibold text-blue-700 hover:text-blue-800" target="_blank" rel="noopener">Join support clinic →</a>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
